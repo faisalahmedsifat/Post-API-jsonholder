@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --collectCoverage",
+    "test": "jest",
+    "test:watch": "jest --watchAll --collectCoverage",
     "dev": "ts-node-dev src/main.ts",
     "dev:build": "tsc",
     "dev:serve": "node lib/main.js"
