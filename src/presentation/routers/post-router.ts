@@ -47,10 +47,17 @@ export default function PostsRouter(
                 browser: req.get('user-agent') as string,
                 posts: matchedPosts,
             };
-
-            const result = await createUserActionUseCase.execute(userActionRequestModel);
-
-            res.status(200).json(result);
+            if(matchedPosts.length > 0){
+                const result = await createUserActionUseCase.execute(userActionRequestModel);
+                // console.log(result);
+                if(result)
+                    // send the response as json array
+                    res.status(201).json(matchedPosts).json();
+                else
+                    throw new CustomError(200, 'Error uploading to database');
+            }else {
+                res.status(200).json(matchedPosts).json();
+            }
         } catch (err) {
             next(err);
         }
