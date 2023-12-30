@@ -75,7 +75,7 @@ export class MongoDBDatabaseWrapper implements NoSQLDatabaseWrapper {
         });
 
         const postIds = [];
-        console.log("posts count", data.posts.length)
+        // console.log("posts count", data.posts.length)
         for (const post of data.posts) {
             // Create a new Post document for each post in the data
             let postAction = this.postModel({

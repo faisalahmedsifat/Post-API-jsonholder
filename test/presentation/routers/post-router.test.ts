@@ -24,7 +24,7 @@ describe('SearchRouter', () => {
         expect(res.body).toEqual({ message: 'Please add a keyword' });
     });
 
-    it('should return 200 and call use case with correct parameters if keyword is provided', async () => {
+    it('should return 201 and call use case with correct parameters if keyword is provided', async () => {
         const mockPosts = [{ id: 1, title: 'test', body: 'test' }];
         const mockResponse = { data: mockPosts };
         (axios.get as jest.Mock).mockResolvedValue(mockResponse);
@@ -33,7 +33,7 @@ describe('SearchRouter', () => {
             .get('/search')
             .set('User-Agent', 'test agent')
             .query({ keyword: 'test' });
-        expect(res.statusCode).toEqual(200);
+        expect(res.statusCode).toEqual(201);
         expect(res.body).toEqual(mockPosts);
         expect(mockUseCase.execute).toHaveBeenCalledWith({
             keyword: 'test',
@@ -71,8 +71,8 @@ describe('SearchRouter', () => {
             .set('User-Agent', 'test agent')
             .query({ keyword: 'apple' });
 
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toEqual(mockPosts);
+        expect(res.status).toEqual(201);
+        expect(res.body).toEqual(expectedResponse);
 
         expect(axios.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts/');
         expect(mockUseCase.execute).toHaveBeenCalledWith({
