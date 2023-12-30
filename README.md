@@ -25,8 +25,8 @@ To get the project up and running, follow these steps:
 4. **Create a `.env` file in the root of the project with the following variables:**
     ```bash
     PORT=3002 # optional
-    MONGO_URI=[your mongo uri]
-    TEST_MONGO_URI=[your test mongo uri] # optional
+    MONGODB_URI=[your mongo uri]
+    TEST_MONGODB_URI=[your test mongo uri] # optional
     ```
     > **Note:** If you don't have a MongoDB URI, you can create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and use the connection string provided. Alternatively, use a local MongoDB instance by replacing `[your mongo uri]` with `mongodb://localhost:27017/sharetrip-interview`. If you don't have a test MongoDB URI, you can use the same URI as your development URI. If you don't provide a PORT, the application will run on port 3002. If you don't provide a TEST_MONGO_URI, the application will use the same URI as your development URI for testing.
 
