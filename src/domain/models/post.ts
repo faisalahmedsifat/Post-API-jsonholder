@@ -1,3 +1,6 @@
+/**
+ * Represents a Post model entity.
+ */
 export interface PostModel {
     userId: number;
     id: number;

@@ -1,3 +1,10 @@
+/**
+ * Represents a wrapper for a NoSQL database.
+ */
 export interface NoSQLDatabaseWrapper {
-    insertOneToMany(doc: any): void
+    /**
+     * Inserts a document into the database with a one-to-many relationship.
+     * @param doc The document to be inserted.
+     */
+    insertOneToMany(doc: any): Promise<any>;
 }

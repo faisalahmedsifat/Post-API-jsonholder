@@ -2,9 +2,6 @@ import request from 'supertest';
 import express, { Application } from 'express';
 import axios from 'axios';
 import PostsRouter from '../../../src/presentation/routers/post-router';
-import { PostModel } from '../../../src/domain/models/post';
-
-
 
 jest.mock('axios');
 
@@ -52,17 +49,17 @@ describe('SearchRouter', () => {
         expect(res.body).toEqual({ message: 'Error fetching data' });
     });
 
-    it('should return a JSON array', async () => {
+    it('should return a JSON object', async () => {
         const mockPosts = [
-            { id: 1, title: 'test', body: 'test' },
-            { id: 2, title: 'apple', body: 'orange' },
-            { id: 3, title: 'banana', body: 'guava' },
-            { id: 4, title: 'apple', body: 'mango' },
+            { id: 1, title: 'test', body: 'test' , userId: 1},
+            { id: 2, title: 'apple', body: 'orange' , userId: 2},
+            { id: 3, title: 'banana', body: 'guava' , userId: 3},
+            { id: 4, title: 'apple', body: 'mango' , userId: 4},
         ];
 
         const expectedResponse = [
-            { id: 2, title: 'apple', body: 'orange' },
-            { id: 4, title: 'apple', body: 'mango' },
+            { id: 2, title: 'apple', body: 'orange' , userId: 2},
+            { id: 4, title: 'apple', body: 'mango' , userId: 4},
         ];
 
         (axios.get as jest.Mock).mockResolvedValue({ data: mockPosts });
@@ -77,11 +74,25 @@ describe('SearchRouter', () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual(mockPosts);
 
-        expect(axios.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts');
+        expect(axios.get).toHaveBeenCalledWith('https://jsonplaceholder.typicode.com/posts/');
         expect(mockUseCase.execute).toHaveBeenCalledWith({
             keyword: 'apple',
             browser: 'test agent',
             posts: expectedResponse,
         });
+    });
+
+    // should return 503 if the response from the external API is not an array
+    it('should return 503 if the response from the external API is not an array', async () => {
+        const mockPosts = { id: 1, title: 'test', body: 'test' };
+        const mockResponse = { data: mockPosts };
+        (axios.get as jest.Mock).mockResolvedValue(mockResponse);
+        mockUseCase.execute.mockResolvedValue(mockPosts);
+        const res = await request(app)
+            .get('/search')
+            .set('User-Agent', 'test agent')
+            .query({ keyword: 'test' });
+        expect(res.statusCode).toEqual(503);
+        expect(res.body).toEqual({ message: 'Invalid response from External API' });
     });
 });
